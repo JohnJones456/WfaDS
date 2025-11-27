@@ -444,10 +444,10 @@ namespace WfaDS {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public AeronaveRow AddAeronaveRow(int Id, string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto) {
+            public AeronaveRow AddAeronaveRow(string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto) {
                 AeronaveRow rowAeronaveRow = ((AeronaveRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        Id,
+                        null,
                         Prefixo,
                         Modelo,
                         Tripulacao,
@@ -507,7 +507,11 @@ namespace WfaDS {
                 base.Columns.Add(this.columnFoto);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, true));
+                this.columnId.AutoIncrement = true;
+                this.columnId.AutoIncrementSeed = -1;
+                this.columnId.AutoIncrementStep = -1;
                 this.columnId.AllowDBNull = false;
+                this.columnId.ReadOnly = true;
                 this.columnId.Unique = true;
                 this.columnPrefixo.AllowDBNull = false;
                 this.columnPrefixo.MaxLength = 20;
@@ -780,10 +784,10 @@ namespace WfaDS {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public PilotoRow AddPilotoRow(int Id, string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto) {
+            public PilotoRow AddPilotoRow(string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto) {
                 PilotoRow rowPilotoRow = ((PilotoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        Id,
+                        null,
                         Nome,
                         Breve,
                         Nacionalidade,
@@ -843,7 +847,11 @@ namespace WfaDS {
                 base.Columns.Add(this.columnFoto);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, true));
+                this.columnId.AutoIncrement = true;
+                this.columnId.AutoIncrementSeed = -1;
+                this.columnId.AutoIncrementStep = -1;
                 this.columnId.AllowDBNull = false;
+                this.columnId.ReadOnly = true;
                 this.columnId.Unique = true;
                 this.columnNome.AllowDBNull = false;
                 this.columnNome.MaxLength = 100;
@@ -1388,11 +1396,10 @@ namespace WfaDS.LP2DataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Aeronave] ([Id], [Prefixo], [Modelo], [Tripulacao], [DataFab], [Foto" +
-                "]) VALUES (@Id, @Prefixo, @Modelo, @Tripulacao, @DataFab, @Foto);\r\nSELECT Id, Pr" +
-                "efixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = @Id)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Aeronave] ([Prefixo], [Modelo], [Tripulacao], [DataFab], [Foto]) VAL" +
+                "UES (@Prefixo, @Modelo, @Tripulacao, @DataFab, @Foto);\r\nSELECT Id, Prefixo, Mode" +
+                "lo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Prefixo", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Prefixo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Modelo", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Modelo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tripulacao", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Tripulacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -1400,10 +1407,9 @@ namespace WfaDS.LP2DataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [Aeronave] SET [Id] = @Id, [Prefixo] = @Prefixo, [Modelo] = @Modelo, [Tripulacao] = @Tripulacao, [DataFab] = @DataFab, [Foto] = @Foto WHERE (([Id] = @Original_Id) AND ([Prefixo] = @Original_Prefixo) AND ([Modelo] = @Original_Modelo) AND ([Tripulacao] = @Original_Tripulacao) AND ([DataFab] = @Original_DataFab) AND ((@IsNull_Foto = 1 AND [Foto] IS NULL) OR ([Foto] = @Original_Foto)));
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Aeronave] SET [Prefixo] = @Prefixo, [Modelo] = @Modelo, [Tripulacao] = @Tripulacao, [DataFab] = @DataFab, [Foto] = @Foto WHERE (([Id] = @Original_Id) AND ([Prefixo] = @Original_Prefixo) AND ([Modelo] = @Original_Modelo) AND ([Tripulacao] = @Original_Tripulacao) AND ([DataFab] = @Original_DataFab) AND ((@IsNull_Foto = 1 AND [Foto] IS NULL) OR ([Foto] = @Original_Foto)));
 SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Prefixo", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Prefixo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Modelo", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Modelo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tripulacao", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Tripulacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -1416,6 +1422,7 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_DataFab", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DataFab", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_Foto", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1428,11 +1435,43 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[5];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto \r\nFROM Aeronave";
+            this._commandCollection[0].CommandText = "SELECT        Id, Prefixo, Modelo, Tripulacao, DataFab, Foto\r\nFROM            Aer" +
+                "onave";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "DELETE FROM Aeronave\r\nWHERE        (Id = @Original_Id)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT DataFab, Foto, Id, Modelo, Prefixo, Tripulacao FROM Aeronave";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "INSERT INTO Aeronave\r\n                         (Prefixo, Modelo, Tripulacao, Data" +
+                "Fab, Foto)\r\nVALUES        (@Prefixo,@Modelo,@Tripulacao,@DataFab,@Foto)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Prefixo", global::System.Data.SqlDbType.VarChar, 20, global::System.Data.ParameterDirection.Input, 0, 0, "Prefixo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Modelo", global::System.Data.SqlDbType.VarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Modelo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tripulacao", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Tripulacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DataFab", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "DataFab", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 500, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "UPDATE       Aeronave\r\nSET                Prefixo = @Prefixo, Modelo = @Modelo, T" +
+                "ripulacao = @Tripulacao, DataFab = @DataFab, Foto = @Foto\r\nWHERE        (Id = @O" +
+                "riginal_Id)";
+            this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Prefixo", global::System.Data.SqlDbType.VarChar, 20, global::System.Data.ParameterDirection.Input, 0, 0, "Prefixo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Modelo", global::System.Data.SqlDbType.VarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Modelo", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Tripulacao", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Tripulacao", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DataFab", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "DataFab", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 500, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1454,6 +1493,30 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual LP2DataSet.AeronaveDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            LP2DataSet.AeronaveDataTable dataTable = new LP2DataSet.AeronaveDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillBy(LP2DataSet.AeronaveDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual LP2DataSet.AeronaveDataTable GetDataBy() {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             LP2DataSet.AeronaveDataTable dataTable = new LP2DataSet.AeronaveDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -1541,32 +1604,31 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int Id, string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto) {
-            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(Id));
+        public virtual int Insert(string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto) {
             if ((Prefixo == null)) {
                 throw new global::System.ArgumentNullException("Prefixo");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Prefixo));
+                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(Prefixo));
             }
             if ((Modelo == null)) {
                 throw new global::System.ArgumentNullException("Modelo");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Modelo));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Modelo));
             }
             if ((Tripulacao == null)) {
                 throw new global::System.ArgumentNullException("Tripulacao");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Tripulacao));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Tripulacao));
             }
-            this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(DataFab));
+            this.Adapter.InsertCommand.Parameters[3].Value = ((System.DateTime)(DataFab));
             if ((Foto == null)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Foto));
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Foto));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1588,61 +1650,61 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int Id, string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto, int Original_Id, string Original_Prefixo, string Original_Modelo, string Original_Tripulacao, System.DateTime Original_DataFab, string Original_Foto) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(Id));
+        public virtual int Update(string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto, int Original_Id, string Original_Prefixo, string Original_Modelo, string Original_Tripulacao, System.DateTime Original_DataFab, string Original_Foto, int Id) {
             if ((Prefixo == null)) {
                 throw new global::System.ArgumentNullException("Prefixo");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Prefixo));
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(Prefixo));
             }
             if ((Modelo == null)) {
                 throw new global::System.ArgumentNullException("Modelo");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Modelo));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Modelo));
             }
             if ((Tripulacao == null)) {
                 throw new global::System.ArgumentNullException("Tripulacao");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Tripulacao));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Tripulacao));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(DataFab));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((System.DateTime)(DataFab));
             if ((Foto == null)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Foto));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Foto));
             }
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_Id));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_Id));
             if ((Original_Prefixo == null)) {
                 throw new global::System.ArgumentNullException("Original_Prefixo");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Prefixo));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_Prefixo));
             }
             if ((Original_Modelo == null)) {
                 throw new global::System.ArgumentNullException("Original_Modelo");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Modelo));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Modelo));
             }
             if ((Original_Tripulacao == null)) {
                 throw new global::System.ArgumentNullException("Original_Tripulacao");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_Tripulacao));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Tripulacao));
             }
-            this.Adapter.UpdateCommand.Parameters[10].Value = ((System.DateTime)(Original_DataFab));
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((System.DateTime)(Original_DataFab));
             if ((Original_Foto == null)) {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[12].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(Original_Foto));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Original_Foto));
             }
+            this.Adapter.UpdateCommand.Parameters[12].Value = ((int)(Id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -1664,7 +1726,138 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
         public virtual int Update(string Prefixo, string Modelo, string Tripulacao, System.DateTime DataFab, string Foto, int Original_Id, string Original_Prefixo, string Original_Modelo, string Original_Tripulacao, System.DateTime Original_DataFab, string Original_Foto) {
-            return this.Update(Original_Id, Prefixo, Modelo, Tripulacao, DataFab, Foto, Original_Id, Original_Prefixo, Original_Modelo, Original_Tripulacao, Original_DataFab, Original_Foto);
+            return this.Update(Prefixo, Modelo, Tripulacao, DataFab, Foto, Original_Id, Original_Prefixo, Original_Modelo, Original_Tripulacao, Original_DataFab, Original_Foto, Original_Id);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int DeleteQuery(int Original_Id) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
+            command.Parameters[0].Value = ((int)(Original_Id));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
+        public virtual int InsertQuery(string Prefixo, string Modelo, string Tripulacao, string DataFab, string Foto) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[3];
+            if ((Prefixo == null)) {
+                throw new global::System.ArgumentNullException("Prefixo");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Prefixo));
+            }
+            if ((Modelo == null)) {
+                throw new global::System.ArgumentNullException("Modelo");
+            }
+            else {
+                command.Parameters[1].Value = ((string)(Modelo));
+            }
+            if ((Tripulacao == null)) {
+                throw new global::System.ArgumentNullException("Tripulacao");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Tripulacao));
+            }
+            if ((DataFab == null)) {
+                throw new global::System.ArgumentNullException("DataFab");
+            }
+            else {
+                command.Parameters[3].Value = ((string)(DataFab));
+            }
+            if ((Foto == null)) {
+                command.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(Foto));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, false)]
+        public virtual int UpdateQuery(string Prefixo, string Modelo, string Tripulacao, string DataFab, string Foto, int Original_Id) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[4];
+            if ((Prefixo == null)) {
+                throw new global::System.ArgumentNullException("Prefixo");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Prefixo));
+            }
+            if ((Modelo == null)) {
+                throw new global::System.ArgumentNullException("Modelo");
+            }
+            else {
+                command.Parameters[1].Value = ((string)(Modelo));
+            }
+            if ((Tripulacao == null)) {
+                throw new global::System.ArgumentNullException("Tripulacao");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Tripulacao));
+            }
+            if ((DataFab == null)) {
+                throw new global::System.ArgumentNullException("DataFab");
+            }
+            else {
+                command.Parameters[3].Value = ((string)(DataFab));
+            }
+            if ((Foto == null)) {
+                command.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(Foto));
+            }
+            command.Parameters[5].Value = ((int)(Original_Id));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     
@@ -1809,11 +2002,10 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [Piloto] ([Id], [Nome], [Breve], [Nacionalidade], [DataNasc], [Foto])" +
-                " VALUES (@Id, @Nome, @Breve, @Nacionalidade, @DataNasc, @Foto);\r\nSELECT Id, Nome" +
-                ", Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @Id)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Piloto] ([Nome], [Breve], [Nacionalidade], [DataNasc], [Foto]) VALUE" +
+                "S (@Nome, @Breve, @Nacionalidade, @DataNasc, @Foto);\r\nSELECT Id, Nome, Breve, Na" +
+                "cionalidade, DataNasc, Foto FROM Piloto WHERE (Id = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nome", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Nome", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Breve", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Breve", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nacionalidade", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Nacionalidade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -1821,10 +2013,9 @@ SELECT Id, Prefixo, Modelo, Tripulacao, DataFab, Foto FROM Aeronave WHERE (Id = 
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [Piloto] SET [Id] = @Id, [Nome] = @Nome, [Breve] = @Breve, [Nacionalidade] = @Nacionalidade, [DataNasc] = @DataNasc, [Foto] = @Foto WHERE (([Id] = @Original_Id) AND ([Nome] = @Original_Nome) AND ([Breve] = @Original_Breve) AND ([Nacionalidade] = @Original_Nacionalidade) AND ([DataNasc] = @Original_DataNasc) AND ((@IsNull_Foto = 1 AND [Foto] IS NULL) OR ([Foto] = @Original_Foto)));
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Piloto] SET [Nome] = @Nome, [Breve] = @Breve, [Nacionalidade] = @Nacionalidade, [DataNasc] = @DataNasc, [Foto] = @Foto WHERE (([Id] = @Original_Id) AND ([Nome] = @Original_Nome) AND ([Breve] = @Original_Breve) AND ([Nacionalidade] = @Original_Nacionalidade) AND ([DataNasc] = @Original_DataNasc) AND ((@IsNull_Foto = 1 AND [Foto] IS NULL) OR ([Foto] = @Original_Foto)));
 SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nome", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Nome", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Breve", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Breve", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nacionalidade", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Nacionalidade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
@@ -1837,6 +2028,7 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_DataNasc", global::System.Data.SqlDbType.Date, 0, global::System.Data.ParameterDirection.Input, 0, 0, "DataNasc", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_Foto", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Foto", global::System.Data.SqlDbType.VarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1849,11 +2041,43 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[5];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto \r\nFROM Piloto";
+            this._commandCollection[0].CommandText = "SELECT        Id, Nome, Breve, Nacionalidade, DataNasc, Foto\r\nFROM            Pil" +
+                "oto";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "DELETE FROM Piloto\r\nWHERE        (Id = @Original_Id)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT Breve, DataNasc, Foto, Id, Nacionalidade, Nome FROM Piloto";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "INSERT INTO Piloto\r\n                         (Nome, Breve, Nacionalidade, DataNas" +
+                "c, Foto)\r\nVALUES        (@Nome,@Breve,@Nacionalidade,@DataNasc,@Foto)";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nome", global::System.Data.SqlDbType.VarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Nome", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Breve", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Breve", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nacionalidade", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Nacionalidade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DataNasc", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "DataNasc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 500, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "UPDATE       Piloto\r\nSET                Nome = @Nome, Breve = @Breve, Nacionalida" +
+                "de = @Nacionalidade, DataNasc = @DataNasc, Foto = @Foto\r\nWHERE        (Id = @Ori" +
+                "ginal_Id)";
+            this._commandCollection[4].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nome", global::System.Data.SqlDbType.VarChar, 100, global::System.Data.ParameterDirection.Input, 0, 0, "Nome", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Breve", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Breve", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Nacionalidade", global::System.Data.SqlDbType.VarChar, 50, global::System.Data.ParameterDirection.Input, 0, 0, "Nacionalidade", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@DataNasc", global::System.Data.SqlDbType.Date, 3, global::System.Data.ParameterDirection.Input, 0, 0, "DataNasc", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Foto", global::System.Data.SqlDbType.VarChar, 500, global::System.Data.ParameterDirection.Input, 0, 0, "Foto", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1875,6 +2099,30 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual LP2DataSet.PilotoDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            LP2DataSet.PilotoDataTable dataTable = new LP2DataSet.PilotoDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillBy(LP2DataSet.PilotoDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual LP2DataSet.PilotoDataTable GetDataBy() {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             LP2DataSet.PilotoDataTable dataTable = new LP2DataSet.PilotoDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -1962,32 +2210,31 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(int Id, string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto) {
-            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(Id));
+        public virtual int Insert(string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto) {
             if ((Nome == null)) {
                 throw new global::System.ArgumentNullException("Nome");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Nome));
+                this.Adapter.InsertCommand.Parameters[0].Value = ((string)(Nome));
             }
             if ((Breve == null)) {
                 throw new global::System.ArgumentNullException("Breve");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Breve));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Breve));
             }
             if ((Nacionalidade == null)) {
                 throw new global::System.ArgumentNullException("Nacionalidade");
             }
             else {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(Nacionalidade));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(Nacionalidade));
             }
-            this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(DataNasc));
+            this.Adapter.InsertCommand.Parameters[3].Value = ((System.DateTime)(DataNasc));
             if ((Foto == null)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+                this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(Foto));
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(Foto));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -2009,61 +2256,61 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(int Id, string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto, int Original_Id, string Original_Nome, string Original_Breve, string Original_Nacionalidade, System.DateTime Original_DataNasc, string Original_Foto) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(Id));
+        public virtual int Update(string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto, int Original_Id, string Original_Nome, string Original_Breve, string Original_Nacionalidade, System.DateTime Original_DataNasc, string Original_Foto, int Id) {
             if ((Nome == null)) {
                 throw new global::System.ArgumentNullException("Nome");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Nome));
+                this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(Nome));
             }
             if ((Breve == null)) {
                 throw new global::System.ArgumentNullException("Breve");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Breve));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Breve));
             }
             if ((Nacionalidade == null)) {
                 throw new global::System.ArgumentNullException("Nacionalidade");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(Nacionalidade));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(Nacionalidade));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(DataNasc));
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((System.DateTime)(DataNasc));
             if ((Foto == null)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(Foto));
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(Foto));
             }
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_Id));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_Id));
             if ((Original_Nome == null)) {
                 throw new global::System.ArgumentNullException("Original_Nome");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Nome));
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_Nome));
             }
             if ((Original_Breve == null)) {
                 throw new global::System.ArgumentNullException("Original_Breve");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Breve));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_Breve));
             }
             if ((Original_Nacionalidade == null)) {
                 throw new global::System.ArgumentNullException("Original_Nacionalidade");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_Nacionalidade));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_Nacionalidade));
             }
-            this.Adapter.UpdateCommand.Parameters[10].Value = ((System.DateTime)(Original_DataNasc));
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((System.DateTime)(Original_DataNasc));
             if ((Original_Foto == null)) {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[12].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[11].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(Original_Foto));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[11].Value = ((string)(Original_Foto));
             }
+            this.Adapter.UpdateCommand.Parameters[12].Value = ((int)(Id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2085,7 +2332,138 @@ SELECT Id, Nome, Breve, Nacionalidade, DataNasc, Foto FROM Piloto WHERE (Id = @I
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
         public virtual int Update(string Nome, string Breve, string Nacionalidade, System.DateTime DataNasc, string Foto, int Original_Id, string Original_Nome, string Original_Breve, string Original_Nacionalidade, System.DateTime Original_DataNasc, string Original_Foto) {
-            return this.Update(Original_Id, Nome, Breve, Nacionalidade, DataNasc, Foto, Original_Id, Original_Nome, Original_Breve, Original_Nacionalidade, Original_DataNasc, Original_Foto);
+            return this.Update(Nome, Breve, Nacionalidade, DataNasc, Foto, Original_Id, Original_Nome, Original_Breve, Original_Nacionalidade, Original_DataNasc, Original_Foto, Original_Id);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int DeleteQuery(int Original_Id) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
+            command.Parameters[0].Value = ((int)(Original_Id));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, false)]
+        public virtual int InsertQuery(string Nome, string Breve, string Nacionalidade, string DataNasc, string Foto) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[3];
+            if ((Nome == null)) {
+                throw new global::System.ArgumentNullException("Nome");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Nome));
+            }
+            if ((Breve == null)) {
+                throw new global::System.ArgumentNullException("Breve");
+            }
+            else {
+                command.Parameters[1].Value = ((string)(Breve));
+            }
+            if ((Nacionalidade == null)) {
+                throw new global::System.ArgumentNullException("Nacionalidade");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Nacionalidade));
+            }
+            if ((DataNasc == null)) {
+                throw new global::System.ArgumentNullException("DataNasc");
+            }
+            else {
+                command.Parameters[3].Value = ((string)(DataNasc));
+            }
+            if ((Foto == null)) {
+                command.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(Foto));
+            }
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, false)]
+        public virtual int UpdateQuery(string Nome, string Breve, string Nacionalidade, string DataNasc, string Foto, int Original_Id) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[4];
+            if ((Nome == null)) {
+                throw new global::System.ArgumentNullException("Nome");
+            }
+            else {
+                command.Parameters[0].Value = ((string)(Nome));
+            }
+            if ((Breve == null)) {
+                throw new global::System.ArgumentNullException("Breve");
+            }
+            else {
+                command.Parameters[1].Value = ((string)(Breve));
+            }
+            if ((Nacionalidade == null)) {
+                throw new global::System.ArgumentNullException("Nacionalidade");
+            }
+            else {
+                command.Parameters[2].Value = ((string)(Nacionalidade));
+            }
+            if ((DataNasc == null)) {
+                throw new global::System.ArgumentNullException("DataNasc");
+            }
+            else {
+                command.Parameters[3].Value = ((string)(DataNasc));
+            }
+            if ((Foto == null)) {
+                command.Parameters[4].Value = global::System.DBNull.Value;
+            }
+            else {
+                command.Parameters[4].Value = ((string)(Foto));
+            }
+            command.Parameters[5].Value = ((int)(Original_Id));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     

@@ -95,12 +95,12 @@ namespace WfaDS
             colIdade.Width = 60;
             dgvAeronaves.Columns.Add(colIdade);
 
-            dgvAeronaves.ReadOnly = true; 
-            dgvAeronaves.AllowUserToAddRows = false; 
-            dgvAeronaves.AllowUserToDeleteRows = false; 
-            dgvAeronaves.EditMode = DataGridViewEditMode.EditProgrammatically; 
+            dgvAeronaves.ReadOnly = true;
+            dgvAeronaves.AllowUserToAddRows = false;
+            dgvAeronaves.AllowUserToDeleteRows = false;
+            dgvAeronaves.EditMode = DataGridViewEditMode.EditProgrammatically;
             dgvAeronaves.MultiSelect = false;
-            dgvAeronaves.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+            dgvAeronaves.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             dgvAeronaves.EnableHeadersVisualStyles = false;
             dgvAeronaves.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
@@ -123,7 +123,9 @@ namespace WfaDS
             btnMenu.Enabled = true;
             btnFoto.Enabled = false;
 
+            // SEMPRE desativado - ID é autoincrement
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = false;
             txtModelo.Enabled = false;
             txtTripulacao.Enabled = false;
@@ -146,7 +148,12 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
 
-            txtID.Enabled = true;
+            // ID SEMPRE desativado - será gerado automaticamente
+            txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
+            txtID.Text = "(Será gerado automaticamente)";
+            txtID.ForeColor = Color.Gray;
+
             txtPrefixo.Enabled = true;
             txtModelo.Enabled = true;
             txtTripulacao.Enabled = true;
@@ -154,8 +161,7 @@ namespace WfaDS
             pbFoto.Enabled = true;
 
             LimparCampos();
-
-            txtID.Focus();
+            txtPrefixo.Focus(); // Foca no prefixo em vez do ID
 
             estadoAtual = FormState.Adicionando;
         }
@@ -172,7 +178,9 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
 
+            // ID SEMPRE desativado em edição também
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = true;
             txtModelo.Enabled = true;
             txtTripulacao.Enabled = true;
@@ -193,7 +201,9 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = false;
 
+            // Todos os campos desativados na visualização
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = false;
             txtModelo.Enabled = false;
             txtTripulacao.Enabled = false;
@@ -224,7 +234,7 @@ namespace WfaDS
             try
             {
                 ConfigurarEstadoAdicionar();
-                MessageBox.Show("Preencha os dados da nova aeronave, incluindo o ID.", "Adicionar Aeronave", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Preencha os dados da nova aeronave. O ID será gerado automaticamente.", "Adicionar Aeronave", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -283,7 +293,7 @@ namespace WfaDS
                     {
                         MessageBox.Show("Aeronave deletada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ConfigurarEstadoInicial();
-                        if (!string.IsNullOrEmpty(dgvAeronaves.Text))
+                        if (dgvAeronaves.Visible)
                         {
                             CarregarTodasAeronaves();
                         }
@@ -309,7 +319,7 @@ namespace WfaDS
                     {
                         MessageBox.Show("Aeronave adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ConfigurarEstadoInicial();
-                        if (!string.IsNullOrEmpty(dgvAeronaves.Text))
+                        if (dgvAeronaves.Visible)
                         {
                             CarregarTodasAeronaves();
                         }
@@ -322,7 +332,7 @@ namespace WfaDS
                         MessageBox.Show("Aeronave atualizada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         btnSalvar.Text = "Salvar";
                         ConfigurarEstadoInicial();
-                        if (!string.IsNullOrEmpty(dgvAeronaves.Text))
+                        if (dgvAeronaves.Visible)
                         {
                             CarregarTodasAeronaves();
                         }
@@ -388,27 +398,15 @@ namespace WfaDS
             }
         }
 
+        private void txtID_TextChanged(object sender, EventArgs e)
+        {
+            // Método mantido apenas para compatibilidade com o Designer
+            // Não faz mais validação pois o ID é autoincrement
+        }
+
         private bool ValidarCampos()
         {
-            if (string.IsNullOrWhiteSpace(txtID.Text))
-            {
-                MessageBox.Show("O campo ID é obrigatório!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtID.Focus();
-                return false;
-            }
-
-            if (!int.TryParse(txtID.Text, out int id) || id <= 0)
-            {
-                MessageBox.Show("ID deve ser um número maior que zero!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (estadoAtual == FormState.Adicionando && IdJaExiste(id))
-            {
-                MessageBox.Show("Este ID já está sendo usado por outra aeronave!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtID.Focus();
-                return false;
-            }
+            // REMOVIDA validação do ID - não é mais necessário
 
             if (string.IsNullOrWhiteSpace(txtPrefixo.Text))
             {
@@ -434,27 +432,15 @@ namespace WfaDS
             return true;
         }
 
-        private bool IdJaExiste(int id)
-        {
-            dataset.Aeronave.Clear();
-            aeronaveTableAdapter.Fill(dataset.Aeronave);
-            return dataset.Aeronave.Any(a => a.Id == id);
-        }
+        // REMOVIDO método IdJaExiste - não é mais necessário
 
         private bool AdicionarAeronave()
         {
             try
             {
-                int id = int.Parse(txtID.Text.Trim());
-
-                if (IdJaExiste(id))
-                {
-                    MessageBox.Show("Este ID já está em uso!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return false;
-                }
-
+                // O ID será gerado automaticamente pelo banco de dados
                 var newRow = dataset.Aeronave.NewAeronaveRow();
-                newRow.Id = id;
+                // NÃO definimos o Id - será autoincrement
                 newRow.Prefixo = txtPrefixo.Text.Trim();
                 newRow.Modelo = txtModelo.Text.Trim();
                 newRow.Tripulacao = txtTripulacao.Text.Trim();
@@ -471,6 +457,10 @@ namespace WfaDS
 
                 dataset.Aeronave.AddAeronaveRow(newRow);
                 aeronaveTableAdapter.Update(dataset.Aeronave);
+
+                // Mostra o ID que foi gerado automaticamente
+                int novoId = newRow.Id;
+                MessageBox.Show($"Aeronave adicionada com sucesso!\nID gerado automaticamente: {novoId}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return true;
             }
@@ -497,7 +487,6 @@ namespace WfaDS
                     txtModelo.Text = aeronave.Field<string>("Modelo") ?? "";
                     txtTripulacao.Text = aeronave.Field<string>("Tripulacao") ?? "";
                     dtpData.Value = aeronave.Field<DateTime>("DataFab");
-
 
                     string caminhoFoto = aeronave.Field<string>("Foto");
                     if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
@@ -609,7 +598,7 @@ namespace WfaDS
                     rowToUpdate["Modelo"] = modelo;
                     rowToUpdate["Tripulacao"] = tripulacao;
                     rowToUpdate["DataFab"] = dataFab;
-                    rowToUpdate["Foto"] = caminhoFoto; 
+                    rowToUpdate["Foto"] = caminhoFoto;
 
                     aeronaveTableAdapter.Update(dataset.Aeronave);
 
@@ -678,18 +667,6 @@ namespace WfaDS
             if (estadoAtual == FormState.Adicionando || estadoAtual == FormState.Editando)
             {
                 btnFoto_Click(sender, e);
-            }
-        }
-
-        private void txtID_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtID.Text) && !int.TryParse(txtID.Text, out _))
-            {
-                txtID.ForeColor = Color.Red;
-            }
-            else
-            {
-                txtID.ForeColor = SystemColors.WindowText;
             }
         }
 

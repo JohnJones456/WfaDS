@@ -96,12 +96,12 @@ namespace WfaDS
             colIdade.Width = 60;
             dgvPilotos.Columns.Add(colIdade);
 
-            dgvPilotos.ReadOnly = true; 
-            dgvPilotos.AllowUserToAddRows = false; 
-            dgvPilotos.AllowUserToDeleteRows = false; 
-            dgvPilotos.EditMode = DataGridViewEditMode.EditProgrammatically; 
-            dgvPilotos.MultiSelect = false; 
-            dgvPilotos.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+            dgvPilotos.ReadOnly = true;
+            dgvPilotos.AllowUserToAddRows = false;
+            dgvPilotos.AllowUserToDeleteRows = false;
+            dgvPilotos.EditMode = DataGridViewEditMode.EditProgrammatically;
+            dgvPilotos.MultiSelect = false;
+            dgvPilotos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             dgvPilotos.EnableHeadersVisualStyles = false;
             dgvPilotos.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
@@ -123,7 +123,9 @@ namespace WfaDS
             btnMenu.Enabled = true;
             btnFoto.Enabled = false;
 
+            // SEMPRE desativado - ID é autoincrement
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = false;
             txtBreve.Enabled = false;
             txtNacionalidade.Enabled = false;
@@ -146,7 +148,12 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
 
-            txtID.Enabled = true;
+            // ID SEMPRE desativado - será gerado automaticamente
+            txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
+            txtID.Text = "(Será gerado automaticamente)";
+            txtID.ForeColor = Color.Gray;
+
             txtNome.Enabled = true;
             txtBreve.Enabled = true;
             txtNacionalidade.Enabled = true;
@@ -154,8 +161,7 @@ namespace WfaDS
             pbFoto.Enabled = true;
 
             LimparCampos();
-
-            txtID.Focus();
+            txtNome.Focus(); // Foca no nome em vez do ID
 
             estadoAtual = FormState.Adicionando;
         }
@@ -172,7 +178,9 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
 
+            // ID SEMPRE desativado em edição também
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = true;
             txtBreve.Enabled = true;
             txtNacionalidade.Enabled = true;
@@ -193,7 +201,9 @@ namespace WfaDS
             btnMenu.Enabled = false;
             btnFoto.Enabled = false;
 
+            // Todos os campos desativados na visualização
             txtID.Enabled = false;
+            txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = false;
             txtBreve.Enabled = false;
             txtNacionalidade.Enabled = false;
@@ -222,7 +232,7 @@ namespace WfaDS
             try
             {
                 ConfigurarEstadoAdicionar();
-                MessageBox.Show("Preencha os dados do novo piloto, incluindo o ID.", "Adicionar Piloto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Preencha os dados do novo piloto. O ID será gerado automaticamente.", "Adicionar Piloto", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -281,7 +291,7 @@ namespace WfaDS
                     {
                         MessageBox.Show("Piloto deletado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ConfigurarEstadoInicial();
-                        if (!string.IsNullOrEmpty(dgvPilotos.Text))
+                        if (dgvPilotos.Visible)
                         {
                             CarregarTodosPilotos();
                         }
@@ -307,7 +317,10 @@ namespace WfaDS
                     {
                         MessageBox.Show("Piloto adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ConfigurarEstadoInicial();
-                        CarregarTodosPilotos();
+                        if (dgvPilotos.Visible)
+                        {
+                            CarregarTodosPilotos();
+                        }
                     }
                 }
                 else if (estadoAtual == FormState.Editando)
@@ -317,7 +330,10 @@ namespace WfaDS
                         MessageBox.Show("Piloto atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         btnSalvar.Text = "Salvar";
                         ConfigurarEstadoInicial();
-                        CarregarTodosPilotos();
+                        if (dgvPilotos.Visible)
+                        {
+                            CarregarTodosPilotos();
+                        }
                     }
                 }
             }
@@ -384,25 +400,7 @@ namespace WfaDS
         #region Validação
         private bool ValidarCampos()
         {
-            if (string.IsNullOrWhiteSpace(txtID.Text))
-            {
-                MessageBox.Show("O campo ID é obrigatório!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtID.Focus();
-                return false;
-            }
-
-            if (!int.TryParse(txtID.Text, out int id) || id <= 0)
-            {
-                MessageBox.Show("ID deve ser um número maior que zero!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (estadoAtual == FormState.Adicionando && IdJaExiste(id))
-            {
-                MessageBox.Show("Este ID já está sendo usado por outro piloto!", "Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtID.Focus();
-                return false;
-            }
+            // REMOVIDA validação do ID - não é mais necessário
 
             if (string.IsNullOrWhiteSpace(txtNome.Text))
             {
@@ -428,12 +426,7 @@ namespace WfaDS
             return true;
         }
 
-        private bool IdJaExiste(int id)
-        {
-            dataset.Piloto.Clear();
-            pilotoTableAdapter.Fill(dataset.Piloto);
-            return dataset.Piloto.Any(p => p.Id == id);
-        }
+        // REMOVIDO método IdJaExiste - não é mais necessário
         #endregion
 
         #region Operações CRUD
@@ -441,16 +434,9 @@ namespace WfaDS
         {
             try
             {
-                int id = int.Parse(txtID.Text.Trim());
-
-                if (IdJaExiste(id))
-                {
-                    MessageBox.Show("Este ID já está em uso!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return false;
-                }
-
+                // O ID será gerado automaticamente pelo banco de dados
                 var newRow = dataset.Piloto.NewPilotoRow();
-                newRow.Id = id;
+                // NÃO definimos o Id - será autoincrement
                 newRow.Nome = txtNome.Text.Trim();
                 newRow.Breve = txtBreve.Text.Trim();
                 newRow.Nacionalidade = txtNacionalidade.Text.Trim();
@@ -467,6 +453,10 @@ namespace WfaDS
 
                 dataset.Piloto.AddPilotoRow(newRow);
                 pilotoTableAdapter.Update(dataset.Piloto);
+
+                // Mostra o ID que foi gerado automaticamente
+                int novoId = newRow.Id;
+                MessageBox.Show($"Piloto adicionado com sucesso!\nID gerado automaticamente: {novoId}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 return true;
             }
@@ -605,7 +595,7 @@ namespace WfaDS
                     rowToUpdate["Breve"] = breve;
                     rowToUpdate["Nacionalidade"] = nacionalidade;
                     rowToUpdate["DataNasc"] = dataNasc;
-                    rowToUpdate["Foto"] = caminhoFoto; 
+                    rowToUpdate["Foto"] = caminhoFoto;
 
                     pilotoTableAdapter.Update(dataset.Piloto);
 
@@ -748,14 +738,8 @@ namespace WfaDS
 
         private void txtID_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtID.Text) && !int.TryParse(txtID.Text, out _))
-            {
-                txtID.ForeColor = Color.Red;
-            }
-            else
-            {
-                txtID.ForeColor = SystemColors.WindowText;
-            }
+            // Método mantido apenas para compatibilidade com o Designer
+            // Não faz mais validação pois o ID é autoincrement
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
