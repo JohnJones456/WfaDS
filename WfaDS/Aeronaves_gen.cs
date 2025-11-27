@@ -51,7 +51,6 @@ namespace WfaDS
             ConfigurarEstadoInicial();
         }
 
-
         private void ConfigurarDataGridView()
         {
             dgvAeronaves.AutoGenerateColumns = false;
@@ -96,6 +95,13 @@ namespace WfaDS
             colIdade.Width = 60;
             dgvAeronaves.Columns.Add(colIdade);
 
+            dgvAeronaves.ReadOnly = true; 
+            dgvAeronaves.AllowUserToAddRows = false; 
+            dgvAeronaves.AllowUserToDeleteRows = false; 
+            dgvAeronaves.EditMode = DataGridViewEditMode.EditProgrammatically; 
+            dgvAeronaves.MultiSelect = false;
+            dgvAeronaves.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+
             dgvAeronaves.EnableHeadersVisualStyles = false;
             dgvAeronaves.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
             dgvAeronaves.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
@@ -103,7 +109,6 @@ namespace WfaDS
             dgvAeronaves.RowHeadersVisible = false;
             dgvAeronaves.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
-
 
         #region Configuração de Estados
 
@@ -117,7 +122,6 @@ namespace WfaDS
             btnCancelar.Enabled = false;
             btnMenu.Enabled = true;
             btnFoto.Enabled = false;
-
 
             txtID.Enabled = false;
             txtPrefixo.Enabled = false;
@@ -251,7 +255,7 @@ namespace WfaDS
                 {
                     if (CarregarAeronave(id))
                     {
-                        idOriginal = id; 
+                        idOriginal = id;
                         ConfigurarEstadoEditar();
                         MessageBox.Show("Dados carregados. Faça as alterações e clique em Confirmar.", "Editar Aeronave", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -316,7 +320,7 @@ namespace WfaDS
                     if (AtualizarAeronave())
                     {
                         MessageBox.Show("Aeronave atualizada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        btnSalvar.Text = "Salvar"; 
+                        btnSalvar.Text = "Salvar";
                         ConfigurarEstadoInicial();
                         if (!string.IsNullOrEmpty(dgvAeronaves.Text))
                         {
@@ -433,7 +437,7 @@ namespace WfaDS
         private bool IdJaExiste(int id)
         {
             dataset.Aeronave.Clear();
-            aeronaveTableAdapter.Fill(dataset.Aeronave); 
+            aeronaveTableAdapter.Fill(dataset.Aeronave);
             return dataset.Aeronave.Any(a => a.Id == id);
         }
 
@@ -458,12 +462,15 @@ namespace WfaDS
 
                 if (!string.IsNullOrEmpty(caminhoImagemSelecionada))
                 {
-                    byte[] imagemBytes = File.ReadAllBytes(caminhoImagemSelecionada);
-                    newRow.Foto = imagemBytes;
+                    newRow.Foto = caminhoImagemSelecionada;
+                }
+                else
+                {
+                    newRow.Foto = string.Empty;
                 }
 
                 dataset.Aeronave.AddAeronaveRow(newRow);
-                aeronaveTableAdapter.Update(dataset.Aeronave); 
+                aeronaveTableAdapter.Update(dataset.Aeronave);
 
                 return true;
             }
@@ -488,28 +495,29 @@ namespace WfaDS
                     txtID.Text = aeronave.Field<int>("Id").ToString();
                     txtPrefixo.Text = aeronave.Field<string>("Prefixo") ?? "";
                     txtModelo.Text = aeronave.Field<string>("Modelo") ?? "";
-                    txtTripulacao.Text = aeronave.Field<string>("Tripulacao") ?? "";  
-                    dtpData.Value = aeronave.Field<DateTime>("DataFab"); 
+                    txtTripulacao.Text = aeronave.Field<string>("Tripulacao") ?? "";
+                    dtpData.Value = aeronave.Field<DateTime>("DataFab");
 
-                    byte[] fotoBytes = aeronave.Field<byte[]>("Foto");
-                    if (fotoBytes != null && fotoBytes.Length > 0)
+
+                    string caminhoFoto = aeronave.Field<string>("Foto");
+                    if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
                     {
                         try
                         {
-                            using (MemoryStream ms = new MemoryStream(fotoBytes))
-                            {
-                                pbFoto.Image = Image.FromStream(ms);
-                                pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
-                            }
+                            pbFoto.Image = Image.FromFile(caminhoFoto);
+                            pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
+                            caminhoImagemSelecionada = caminhoFoto;
                         }
                         catch
                         {
                             pbFoto.Image = null;
+                            caminhoImagemSelecionada = "";
                         }
                     }
                     else
                     {
                         pbFoto.Image = null;
+                        caminhoImagemSelecionada = "";
                     }
 
                     dadosCarregados = true;
@@ -554,6 +562,10 @@ namespace WfaDS
                     dtAeronaves.Rows.Add(id, prefixo, modelo, tripulacao, dataFab, idade);
                 }
 
+                dgvAeronaves.ReadOnly = true;
+                dgvAeronaves.AllowUserToAddRows = false;
+                dgvAeronaves.AllowUserToDeleteRows = false;
+
                 dgvAeronaves.Refresh();
             }
             catch (Exception ex)
@@ -577,20 +589,16 @@ namespace WfaDS
                 string tripulacao = txtTripulacao.Text.Trim();
                 DateTime dataFab = dtpData.Value;
 
-                byte[] imagemBytes = null;
+                string caminhoFoto = caminhoImagemSelecionada;
 
-                if (!string.IsNullOrEmpty(caminhoImagemSelecionada) && File.Exists(caminhoImagemSelecionada))
-                {
-                    imagemBytes = File.ReadAllBytes(caminhoImagemSelecionada);
-                }
-                else if (pbFoto.Image != null)
+                if (string.IsNullOrEmpty(caminhoFoto))
                 {
                     dataset.Aeronave.Clear();
                     aeronaveTableAdapter.Fill(dataset.Aeronave);
                     var aeronaveAtual = dataset.Aeronave.AsEnumerable().FirstOrDefault(a => a.Field<int>("Id") == idOriginal);
                     if (aeronaveAtual != null)
                     {
-                        imagemBytes = aeronaveAtual.Field<byte[]>("Foto");
+                        caminhoFoto = aeronaveAtual.Field<string>("Foto") ?? string.Empty;
                     }
                 }
 
@@ -599,9 +607,9 @@ namespace WfaDS
                 {
                     rowToUpdate["Prefixo"] = prefixo;
                     rowToUpdate["Modelo"] = modelo;
-                    rowToUpdate["Tripulacao"] = tripulacao; 
-                    rowToUpdate["DataFab"] = dataFab; 
-                    rowToUpdate["Foto"] = imagemBytes;
+                    rowToUpdate["Tripulacao"] = tripulacao;
+                    rowToUpdate["DataFab"] = dataFab;
+                    rowToUpdate["Foto"] = caminhoFoto; 
 
                     aeronaveTableAdapter.Update(dataset.Aeronave);
 
@@ -721,7 +729,6 @@ namespace WfaDS
             }
         }
 
-
         private void CarregarImagemAeronave(int idAeronave)
         {
             try
@@ -734,14 +741,11 @@ namespace WfaDS
 
                 if (aeronave != null)
                 {
-                    byte[] fotoBytes = aeronave.Field<byte[]>("Foto");
-                    if (fotoBytes != null && fotoBytes.Length > 0)
+                    string caminhoFoto = aeronave.Field<string>("Foto");
+                    if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
                     {
-                        using (MemoryStream ms = new MemoryStream(fotoBytes))
-                        {
-                            pbFoto.Image = Image.FromStream(ms);
-                            pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
-                        }
+                        pbFoto.Image = Image.FromFile(caminhoFoto);
+                        pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                     else
                     {

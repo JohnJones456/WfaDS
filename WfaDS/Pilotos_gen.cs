@@ -96,6 +96,13 @@ namespace WfaDS
             colIdade.Width = 60;
             dgvPilotos.Columns.Add(colIdade);
 
+            dgvPilotos.ReadOnly = true; 
+            dgvPilotos.AllowUserToAddRows = false; 
+            dgvPilotos.AllowUserToDeleteRows = false; 
+            dgvPilotos.EditMode = DataGridViewEditMode.EditProgrammatically; 
+            dgvPilotos.MultiSelect = false; 
+            dgvPilotos.SelectionMode = DataGridViewSelectionMode.FullRowSelect; 
+
             dgvPilotos.EnableHeadersVisualStyles = false;
             dgvPilotos.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
             dgvPilotos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
@@ -104,7 +111,7 @@ namespace WfaDS
             dgvPilotos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        #region Configuração de Estados (mantido igual)
+        #region Configuração de Estados
         private void ConfigurarEstadoInicial()
         {
             btnAdicionar.Enabled = true;
@@ -207,7 +214,9 @@ namespace WfaDS
             caminhoImagemSelecionada = "";
             idOriginal = -1;
         }
+        #endregion
 
+        #region Eventos dos Botões
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
             try
@@ -230,7 +239,7 @@ namespace WfaDS
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao visualizar aeronaves: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao visualizar pilotos: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -370,7 +379,9 @@ namespace WfaDS
                 MessageBox.Show($"Erro ao carregar imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
 
+        #region Validação
         private bool ValidarCampos()
         {
             if (string.IsNullOrWhiteSpace(txtID.Text))
@@ -423,7 +434,9 @@ namespace WfaDS
             pilotoTableAdapter.Fill(dataset.Piloto);
             return dataset.Piloto.Any(p => p.Id == id);
         }
+        #endregion
 
+        #region Operações CRUD
         private bool AdicionarPiloto()
         {
             try
@@ -445,8 +458,11 @@ namespace WfaDS
 
                 if (!string.IsNullOrEmpty(caminhoImagemSelecionada))
                 {
-                    byte[] imagemBytes = File.ReadAllBytes(caminhoImagemSelecionada);
-                    newRow.Foto = imagemBytes;
+                    newRow.Foto = caminhoImagemSelecionada;
+                }
+                else
+                {
+                    newRow.Foto = string.Empty;
                 }
 
                 dataset.Piloto.AddPilotoRow(newRow);
@@ -478,25 +494,25 @@ namespace WfaDS
                     txtNacionalidade.Text = piloto.Field<string>("Nacionalidade") ?? "";
                     dtpData.Value = piloto.Field<DateTime>("DataNasc");
 
-                    byte[] fotoBytes = piloto.Field<byte[]>("Foto");
-                    if (fotoBytes != null && fotoBytes.Length > 0)
+                    string caminhoFoto = piloto.Field<string>("Foto");
+                    if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
                     {
                         try
                         {
-                            using (MemoryStream ms = new MemoryStream(fotoBytes))
-                            {
-                                pbFoto.Image = Image.FromStream(ms);
-                                pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
-                            }
+                            pbFoto.Image = Image.FromFile(caminhoFoto);
+                            pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
+                            caminhoImagemSelecionada = caminhoFoto;
                         }
                         catch
                         {
                             pbFoto.Image = null;
+                            caminhoImagemSelecionada = "";
                         }
                     }
                     else
                     {
                         pbFoto.Image = null;
+                        caminhoImagemSelecionada = "";
                     }
 
                     dadosCarregados = true;
@@ -541,6 +557,10 @@ namespace WfaDS
                     dtPilotos.Rows.Add(id, nome, breve, nacionalidade, dataNasc, idade);
                 }
 
+                dgvPilotos.ReadOnly = true;
+                dgvPilotos.AllowUserToAddRows = false;
+                dgvPilotos.AllowUserToDeleteRows = false;
+
                 dgvPilotos.Refresh();
                 ConfigurarEstadoVisualizar();
             }
@@ -565,20 +585,16 @@ namespace WfaDS
                 string nacionalidade = txtNacionalidade.Text.Trim();
                 DateTime dataNasc = dtpData.Value;
 
-                byte[] imagemBytes = null;
+                string caminhoFoto = caminhoImagemSelecionada;
 
-                if (!string.IsNullOrEmpty(caminhoImagemSelecionada) && File.Exists(caminhoImagemSelecionada))
-                {
-                    imagemBytes = File.ReadAllBytes(caminhoImagemSelecionada);
-                }
-                else if (pbFoto.Image != null)
+                if (string.IsNullOrEmpty(caminhoFoto))
                 {
                     dataset.Piloto.Clear();
                     pilotoTableAdapter.Fill(dataset.Piloto);
                     var pilotoAtual = dataset.Piloto.AsEnumerable().FirstOrDefault(p => p.Field<int>("Id") == idOriginal);
                     if (pilotoAtual != null)
                     {
-                        imagemBytes = pilotoAtual.Field<byte[]>("Foto");
+                        caminhoFoto = pilotoAtual.Field<string>("Foto") ?? string.Empty;
                     }
                 }
 
@@ -589,7 +605,7 @@ namespace WfaDS
                     rowToUpdate["Breve"] = breve;
                     rowToUpdate["Nacionalidade"] = nacionalidade;
                     rowToUpdate["DataNasc"] = dataNasc;
-                    rowToUpdate["Foto"] = imagemBytes;
+                    rowToUpdate["Foto"] = caminhoFoto; 
 
                     pilotoTableAdapter.Update(dataset.Piloto);
 
@@ -643,16 +659,16 @@ namespace WfaDS
                 return false;
             }
         }
+        #endregion
 
+        #region Eventos do DataGridView
         private void dgvPilotos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        { 
-        
-        }
+        {
 
+        }
 
         private void dgvPilotos_SelectionChanged(object sender, EventArgs e)
         {
-
 
         }
 
@@ -660,23 +676,23 @@ namespace WfaDS
         {
             try
             {
+                dataset.Piloto.Clear();
+                pilotoTableAdapter.Fill(dataset.Piloto);
+
                 var piloto = dataset.Piloto.AsEnumerable()
                                .FirstOrDefault(p => p.Field<int>("Id") == idPiloto);
 
                 if (piloto != null)
                 {
-                    byte[] fotoBytes = piloto.Field<byte[]>("Foto");
-                    if (fotoBytes != null && fotoBytes.Length > 0)
+                    string caminhoFoto = piloto.Field<string>("Foto");
+                    if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
                     {
-                        using (MemoryStream ms = new MemoryStream(fotoBytes))
-                        {
-                            pbFoto.Image = Image.FromStream(ms);
-                            pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
-                        }
+                        pbFoto.Image = Image.FromFile(caminhoFoto);
+                        pbFoto.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                     else
                     {
-                        pbFoto.Image = null; 
+                        pbFoto.Image = null;
                     }
                 }
             }
@@ -687,8 +703,6 @@ namespace WfaDS
                 pbFoto.Image = null;
             }
         }
-
-
 
         private void dgvPilotos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -712,7 +726,6 @@ namespace WfaDS
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
 
         #region Outros Eventos

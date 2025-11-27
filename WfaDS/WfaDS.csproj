@@ -52,9 +52,6 @@
     <Compile Include="Aeronaves_gen.Designer.cs">
       <DependentUpon>Aeronaves_gen.cs</DependentUpon>
     </Compile>
-    <Compile Include="LP2DataSet.cs">
-      <DependentUpon>LP2DataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="LP2DataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
