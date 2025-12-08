@@ -122,8 +122,6 @@ namespace WfaDS
             btnCancelar.Enabled = false;
             btnMenu.Enabled = true;
             btnFoto.Enabled = false;
-
-            // SEMPRE desativado - ID é autoincrement
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = false;
@@ -147,8 +145,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
-
-            // ID SEMPRE desativado - será gerado automaticamente
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtID.Text = "(Será gerado automaticamente)";
@@ -161,7 +157,7 @@ namespace WfaDS
             pbFoto.Enabled = true;
 
             LimparCampos();
-            txtPrefixo.Focus(); // Foca no prefixo em vez do ID
+            txtPrefixo.Focus(); 
 
             estadoAtual = FormState.Adicionando;
         }
@@ -177,8 +173,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
-
-            // ID SEMPRE desativado em edição também
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = true;
@@ -200,8 +194,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = false;
-
-            // Todos os campos desativados na visualização
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtPrefixo.Enabled = false;
@@ -400,13 +392,11 @@ namespace WfaDS
 
         private void txtID_TextChanged(object sender, EventArgs e)
         {
-            // Método mantido apenas para compatibilidade com o Designer
-            // Não faz mais validação pois o ID é autoincrement
+            // Método
         }
 
         private bool ValidarCampos()
         {
-            // REMOVIDA validação do ID - não é mais necessário
 
             if (string.IsNullOrWhiteSpace(txtPrefixo.Text))
             {
@@ -432,15 +422,12 @@ namespace WfaDS
             return true;
         }
 
-        // REMOVIDO método IdJaExiste - não é mais necessário
 
         private bool AdicionarAeronave()
         {
             try
             {
-                // O ID será gerado automaticamente pelo banco de dados
                 var newRow = dataset.Aeronave.NewAeronaveRow();
-                // NÃO definimos o Id - será autoincrement
                 newRow.Prefixo = txtPrefixo.Text.Trim();
                 newRow.Modelo = txtModelo.Text.Trim();
                 newRow.Tripulacao = txtTripulacao.Text.Trim();
@@ -458,7 +445,6 @@ namespace WfaDS
                 dataset.Aeronave.AddAeronaveRow(newRow);
                 aeronaveTableAdapter.Update(dataset.Aeronave);
 
-                // Mostra o ID que foi gerado automaticamente
                 int novoId = newRow.Id;
                 MessageBox.Show($"Aeronave adicionada com sucesso!\nID gerado automaticamente: {novoId}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

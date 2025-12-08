@@ -122,8 +122,6 @@ namespace WfaDS
             btnCancelar.Enabled = false;
             btnMenu.Enabled = true;
             btnFoto.Enabled = false;
-
-            // SEMPRE desativado - ID é autoincrement
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = false;
@@ -147,8 +145,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
-
-            // ID SEMPRE desativado - será gerado automaticamente
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtID.Text = "(Será gerado automaticamente)";
@@ -161,7 +157,7 @@ namespace WfaDS
             pbFoto.Enabled = true;
 
             LimparCampos();
-            txtNome.Focus(); // Foca no nome em vez do ID
+            txtNome.Focus();
 
             estadoAtual = FormState.Adicionando;
         }
@@ -177,8 +173,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = true;
-
-            // ID SEMPRE desativado em edição também
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = true;
@@ -200,8 +194,6 @@ namespace WfaDS
             btnCancelar.Enabled = true;
             btnMenu.Enabled = false;
             btnFoto.Enabled = false;
-
-            // Todos os campos desativados na visualização
             txtID.Enabled = false;
             txtID.BackColor = SystemColors.Control;
             txtNome.Enabled = false;
@@ -400,7 +392,6 @@ namespace WfaDS
         #region Validação
         private bool ValidarCampos()
         {
-            // REMOVIDA validação do ID - não é mais necessário
 
             if (string.IsNullOrWhiteSpace(txtNome.Text))
             {
@@ -426,7 +417,6 @@ namespace WfaDS
             return true;
         }
 
-        // REMOVIDO método IdJaExiste - não é mais necessário
         #endregion
 
         #region Operações CRUD
@@ -434,9 +424,7 @@ namespace WfaDS
         {
             try
             {
-                // O ID será gerado automaticamente pelo banco de dados
                 var newRow = dataset.Piloto.NewPilotoRow();
-                // NÃO definimos o Id - será autoincrement
                 newRow.Nome = txtNome.Text.Trim();
                 newRow.Breve = txtBreve.Text.Trim();
                 newRow.Nacionalidade = txtNacionalidade.Text.Trim();
@@ -454,7 +442,6 @@ namespace WfaDS
                 dataset.Piloto.AddPilotoRow(newRow);
                 pilotoTableAdapter.Update(dataset.Piloto);
 
-                // Mostra o ID que foi gerado automaticamente
                 int novoId = newRow.Id;
                 MessageBox.Show($"Piloto adicionado com sucesso!\nID gerado automaticamente: {novoId}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -738,8 +725,7 @@ namespace WfaDS
 
         private void txtID_TextChanged(object sender, EventArgs e)
         {
-            // Método mantido apenas para compatibilidade com o Designer
-            // Não faz mais validação pois o ID é autoincrement
+            // Método 
         }
 
         private void txtNome_TextChanged(object sender, EventArgs e)
